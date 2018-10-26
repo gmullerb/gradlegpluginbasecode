@@ -1,0 +1,15 @@
+//  Copyright (c) 2018 SomeDeveloper/SomeCompany.
+//  Licensed under the SOME License, see LICENSE.txt
+
+// Uncomment this if the plugin should be also applied to this plugin project
+// or remove the /buildSrc folder if not required
+// sourceSets {
+//     main {
+//         groovy {
+//             srcDirs = ['../src/main/groovy']
+//         }
+//         resources {
+//             srcDirs = ['../src/main/resources']
+//         }
+//     }
+// }

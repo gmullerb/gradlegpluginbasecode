@@ -1,0 +1,67 @@
+//  Copyright (c) 2018 SomeDeveloper/SomeCompany.
+//  Licensed under the SOME License, see LICENSE.txt
+
+plugins {
+  id 'all.shared.gradle.project-style-checker' version '1.0.2'
+  id 'com.gradle.plugin-publish' version '0.10.0'
+  id 'groovy'
+  id 'jacoco'
+}
+
+repositories {
+  jcenter()
+  maven {
+    url 'https://dl.bintray.com/gmullerb/all.shared.gradle'
+  }
+}
+
+dependencies {
+  compile gradleApi()
+  testCompile gradleTestKit()
+  testCompile 'all.shared.gradle:spy-project-factory:+'
+  testCompile 'org.junit.jupiter:junit-jupiter-api:+'
+  testRuntime 'org.junit.jupiter:junit-jupiter-engine:+'
+}
+
+final PLUGIN_SITE = 'plugin site'
+
+// Uncomment this if the plugin should be also applied to this plugin project
+// or remove if not required
+// apply plugin: 'all.shared.gradle.pluginName' // (and remember to rename all.shared.gradle.pluginName.properties file)
+
+// Plugin settings
+//////////////////
+
+pluginBundle {
+  website = PLUGIN_SITE
+  vcsUrl = PLUGIN_SITE
+  description = 'plugin description'
+  tags = ['plugin tag 1', 'plugin tag 2']
+  plugins {
+    thePlugin {
+      id = project.hasProperty('PLUGIN_ID')
+        ? property('PLUGIN_ID')
+        : 'Set plugin id'
+      displayName = 'plugin title'
+    }
+  }
+}
+
+// Task settings
+////////////////
+
+assemble {
+  dependsOn += ['assessCommon', 'assessGradle', 'codenarcMain', 'codenarcTest']
+}
+
+test {
+  // Test task settings
+  useJUnitPlatform()
+  // gradle task settings
+  finalizedBy jacocoTestReport, jacocoTestCoverageVerification
+}
+
+// Default task
+///////////////
+
+defaultTasks 'build'
