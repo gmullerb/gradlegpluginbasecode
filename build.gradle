@@ -2,6 +2,7 @@
 //  Licensed under the SOME License, see LICENSE.txt
 
 plugins {
+  id 'all.shared.gradle.code-common-tasks' version '1.0.0'
   id 'all.shared.gradle.project-style-checker' version '1.0.2'
   id 'com.gradle.plugin-publish' version '0.10.0'
   id 'groovy'
@@ -27,7 +28,7 @@ final PLUGIN_SITE = 'plugin site'
 
 // Uncomment this if the plugin should be also applied to this plugin project
 // or remove if not required
-// apply plugin: 'all.shared.gradle.pluginName' // (and remember to rename all.shared.gradle.pluginName.properties file)
+// apply plugin: 'all.shared.gradle.some-gradle-plugin' // (and remember to rename all.shared.gradle.some-gradle-plugin.properties file)
 
 // Plugin settings
 //////////////////
@@ -50,18 +51,35 @@ pluginBundle {
 // Task settings
 ////////////////
 
-assemble {
-  dependsOn += ['assessCommon', 'assessGradle', 'codenarcMain', 'codenarcTest']
+test {
+  useJUnitPlatform()
 }
 
-test {
-  // Test task settings
-  useJUnitPlatform()
+jacocoTestCoverageVerification {
+  // jacocoTestCoverageVerification task settings
+  violationRules {
+    rule {
+      element = 'BUNDLE'
+      limit {
+        counter = 'BRANCH'
+        value = 'COVEREDRATIO'
+        minimum = 0.925
+      }
+    }
+    rule {
+      element = 'BUNDLE'
+      limit {
+        counter = 'INSTRUCTION'
+        value = 'COVEREDRATIO'
+        minimum = 0.875
+      }
+    }
+  }
   // gradle task settings
-  finalizedBy jacocoTestReport, jacocoTestCoverageVerification
+  shouldRunAfter jacocoTestReport
 }
 
 // Default task
 ///////////////
 
-defaultTasks 'build'
+defaultTasks 'assessCommon', 'assessGradle', 'build'

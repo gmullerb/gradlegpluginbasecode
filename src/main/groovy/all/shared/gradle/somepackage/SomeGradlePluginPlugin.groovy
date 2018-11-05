@@ -14,11 +14,11 @@ class SomeGradlePluginPlugin implements Plugin<Project> {
   static final boolean complement(final Project project) {
     if (project.extensions.findByName(EXTENSION_NAME) == null) {
       project.extensions.create(EXTENSION_NAME, SomeGradlePluginExtension)
-      project.logger.debug('Added someGradlePlugin extension')
+      project.logger.debug('Added some-gradle-plugin extension')
       true
     }
     else {
-      project.logger.error('Couldn\'t add someGradlePlugin extension')
+      project.logger.error('Couldn\'t add some-gradle-plugin extension')
       false
     }
   }

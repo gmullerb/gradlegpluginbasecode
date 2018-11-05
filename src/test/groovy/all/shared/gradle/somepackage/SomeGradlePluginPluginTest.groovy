@@ -28,7 +28,7 @@ class SomeGradlePluginPluginTest {
     assertTrue(result)
     assertNotNull(spyProject.extensions.getByName(SomeGradlePluginPlugin.EXTENSION_NAME))
     verify(spyProject.logger)
-      .debug(eq('Added someGradlePlugin extension'))
+      .debug(eq('Added some-gradle-plugin extension'))
   }
 
   @Test
@@ -39,7 +39,7 @@ class SomeGradlePluginPluginTest {
 
     assertFalse(result)
     verify(spyProject.logger)
-      .error(eq('Couldn\'t add someGradlePlugin extension'))
+      .error(eq('Couldn\'t add some-gradle-plugin extension'))
   }
 
   @Test
@@ -49,6 +49,6 @@ class SomeGradlePluginPluginTest {
     plugin.apply(spyProject)
 
     verify(spyProject.logger)
-      .debug(eq('Added someGradlePlugin extension'))
+      .debug(eq('Added some-gradle-plugin extension'))
   }
 }

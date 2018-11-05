@@ -70,7 +70,7 @@ git clone https://github.com/gmullerb/gradlegpluginbasecode
 
 ### Customizing it
 
-1 . Rename `somepackage`/`SomeGradlePlugin`/`pluginName` based on the plugin name:
+1 . Rename `somepackage`/`SomeGradlePlugin`/`some-gradle-plugin` based on the plugin name:
 
 * `somepackage`:
   * In folders.
@@ -87,20 +87,28 @@ git clone https://github.com/gmullerb/gradlegpluginbasecode
     * [`SomeGradlePluginPlugin`](src/main/groovy/all/shared/gradle/somepackage/SomeGradlePluginPlugin.groovy).
     * [`SomeGradlePluginExtension`](src/main/groovy/all/shared/gradle/somepackage/SomeGradlePluginExtension.groovy).
     * [`SomeGradlePluginPluginTest`](src/test/groovy/all/shared/gradle/somepackage/SomeGradlePluginPluginTest.groovy).
-* `pluginName`:
-  * Plugin file name: [all.shared.gradle.pluginName.properties](src/main/resources/META-INF/gradle-plugins/all.shared.gradle.pluginName.properties).
+* `some-gradle-plugin`:
+  * Plugin file name: [all.shared.gradle.some-gradle-plugin.properties](src/main/resources/META-INF/gradle-plugins/all.shared.gradle.some-gradle-plugin.properties).
     * Change implementation class: `all.shared.gradle.somepackage.SomeGradlePluginPlugin`.
   * [Gradle's settings file](settings.gradle):
 
   ```gradle
-    rootProject.name = 'plugin name'
+    rootProject.name = 'some-gradle-plugin'
   ```
 
   * [Gradle's build file](build.gradle) (if required):
 
   ```gradle
-    apply plugin: 'all.shared.gradle.pluginName'
+    apply plugin: 'all.shared.gradle.some-gradle-plugin'
   ```
+
+  * Logs:
+    * Change the following messages:
+      * `'Added some-gradle-plugin extension'`.
+      * `'Couldn\'t add some-gradle-plugin extension'`.
+    * In the following files:
+      * [`SomeGradlePluginPlugin`](src/main/groovy/all/shared/gradle/somepackage/SomeGradlePluginPlugin.groovy).
+      * [`SomeGradlePluginPluginTest`](src/test/groovy/all/shared/gradle/somepackage/SomeGradlePluginPluginTest.groovy).
 
 2 . Adjust the License according to requirements:
 
@@ -142,7 +150,9 @@ pluginBundle {
 4 . If the plugin is not going to be used in the same project that creates the plugin, then remove:
 
 * the `/buildSrc` folder.
-* the whole `apply plugin: 'all.shared.gradle.pluginName'` block from [Gradle's build file](build.gradle).
+* the whole `apply plugin: 'all.shared.gradle.some-gradle-plugin'` block from [Gradle's build file](build.gradle).
+
+Optional . Run `gradlew`, this will run default task, should get `BUILD SUCCESSFUL` indicating every change went well.
 
 5 . Modify `README.md` file according to requirements.
 
@@ -155,10 +165,15 @@ pluginBundle {
 
 8 . Add additional required tests and Test files.
 
-For actual use examples, see:  
+* if `gradleTestKit()`  is not required, then remove it from [Gradle's build file](build.gradle).
 
-* [file-lister project](https://github.com/gmullerb/file-lister).  
+9 . Remove `.git` folder.
+
+For actual use examples, see:
+
+* [code-common-tasks project](https://github.com/gmullerb/code-common-tasks).  
 * [base-style-config-wrapper project](https://github.com/gmullerb/base-style-config-wrapper).  
+* [file-lister project](https://github.com/gmullerb/file-lister).  
 * [project-style-checker project](https://github.com/gmullerb/project-style-checker).
 
 ### Building it
@@ -177,7 +192,7 @@ For actual use examples, see:
 * To test code: `gradlew test`
   * This will run jacoco code coverage [1].
 
-* To publish plugin: `./gradlew -PPLUGIN_ID=all.shared.gradle.pluginName publishPlugins`
+* To publish plugin: `./gradlew -PPLUGIN_ID=all.shared.gradle.some-gradle-plugin publishPlugins`
   * `-PPLUGIN_ID` indicates the plugin id.
 
 * To get all the tasks for the project: `gradlew tasks --all`
@@ -186,11 +201,12 @@ For actual use examples, see:
 
 ### Convention over Configuration
 
-All `all.shared.gradle` plugins define two classes:
+All `all.shared.gradle` plugins define:
 
 * _PluginName_**Plugin**: which contains the class implements `Plugin` interface.
-
 * _PluginName_**Extension**: which represent the extension of the plugin.
+* If Tasks are define, then their names will be _TaskName_**Task**.
+* If Actions are define, then their names will be _ActionName_**Action**.
 
 All `all.shared.gradle` plugins have two **`static`** members:
 
@@ -203,6 +219,35 @@ All `all.shared.gradle` plugins have two **`static`** members:
 Both may be useful when applying the plugin when creating custom plugins.
 
 All `all.shared.gradle` plugins "silently" fail when the extension can not be added.
+
+Due to delays in the approval on [Gradle Plugin Repository](https://plugins.gradle.org/u/gmullerb)[1], is possible that the plugin is not available from there, consequently, always recommend to the plugin's user to add the following to `settings.gradle`:
+
+```gradle
+  pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        maven {
+          url 'the plugin repository'
+        }
+    }
+  }
+```
+
+e.g. [2]:
+
+```gradle
+  pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        maven {
+          url 'https://dl.bintray.com/gmullerb/all.shared.gradle'
+        }
+    }
+  }
+```
+
+> [1] Due to new Gradle Plugin Repository policies, delays of several days, without answer, for approval of the plugin publication can happen.  
+> [2] For an actual use example, see [basecode - settings.gradle](https://github.com/gmullerb/basecode/blob/master/settings.gradle).
 
 ## Documentation
 

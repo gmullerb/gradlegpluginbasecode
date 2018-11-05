@@ -1,1 +1,10 @@
-rootProject.name = 'plugin name'
+pluginManagement {
+  repositories {
+      gradlePluginPortal()
+      maven {
+        url 'https://dl.bintray.com/gmullerb/all.shared.gradle'
+      }
+  }
+}
+
+rootProject.name = 'some-gradle-plugin'
